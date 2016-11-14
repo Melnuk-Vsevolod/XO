@@ -9,36 +9,49 @@ public class Main {
 		int[][] arr = new int[3][3];
 
 		if (random() == -1) {// перший х≥д буде гравц€
-			System.out.println("enter  X");
-			int x = scan(sc);
-			System.out.println("enter  Y");
-			int y = scan(sc);
-
-			arr[x][y] = -1;
+			playerMove(arr, sc);
+			System.out.println("“и походив");
 			print(arr);
-
 		}
+
 		int move = 0;// комп ще н≥разу не ходив
 		boolean CPUMove = true;
 
 		while (isRun(arr)) {
 			if (move == 0) {// код дл€ 1 ходу компа
-				if (firstCpuMove(arr)) {// перев≥р€Ї чи зан€та
-					// середина €кщо зан€та то ставим в кут
-					arr[1][1] = 1;
+
+				if (firstCpuMove(arr)) {// перев≥р€Ї чи зан€та // середина €кщо
+										// зан€та то ставим в кут
+					arr[1][1] = 10;
 				} else {
-					arr[0][0] = 1;
+					arr[0][0] = 10;
 				}
 				move = 1;
+
 			} else {// вже не перший х≥д компа
+				int winChanceCPU = CpuCanWin(arr);
+				if ((winChanceCPU) != 0) {// Ї виграшний дл€ компа х≥д
+					findCPULastMove(arr, winChanceCPU);// комп робить останн≥й
+														// // вигашний х≥д
+					break;// цикл while зак≥нчивс€ ≥дем до результат≥в
 
-			}
-			System.out.println("enter  X");
-			int x = scan(sc);
-			System.out.println("enter  Y");
-			int y = scan(sc);
-
-			arr[x][y] = -1;
+				} else {// €кщо нема виграшного дл€ компа, то перев≥р€Їм чи Ї //
+						// виграшний дл€ ≥грока
+					int winChancePlayer = PlayerCanWin(arr);
+					if ((winChancePlayer) != 0) {// Ї виграшний дл€ ≥грака х≥д
+						findPlayerLastMove(arr, winChancePlayer);// шукаЇм //
+																	// виграшний//
+																	// х≥д //
+																	// ≥грака ≥
+																	// блокуЇм
+					}
+				}
+				int corner = findCorner(arr);// ставим в любий кут
+			} // комп зробив х≥д
+			System.out.println(" омп походив");
+			print(arr);
+			playerMove(arr, sc);
+			System.out.println("“и походив");
 			print(arr);
 
 		}
@@ -51,14 +64,15 @@ public class Main {
 		if (win(arr) == -3) {
 			System.out.println("“и ¬»√–ј¬!");
 		}
-		if (win(arr) == 3) {
+		if (win(arr) == 30) {
 			System.out.println("“и програв!");
 		}
+		print(arr);
 
 		// test(arr);
 		// System.out.println(win(arr));
 
-	}
+	} // END of Main
 
 	public static int scan(Scanner sc) { // считати х≥д гравц€
 		return (sc.nextInt() - 1);
@@ -113,7 +127,7 @@ public class Main {
 			int sum = 0;
 			for (int j = 0; j < arr.length; j++) {
 				sum += arr[i][j];
-				if ((sum == -3) || (sum == 3)) {
+				if ((sum == -3) || (sum == 30)) {
 					return sum;
 				}
 			}
@@ -125,7 +139,7 @@ public class Main {
 			int sum = 0;
 			for (int i = 0; i < arr.length; i++) {
 				sum += arr[i][j];
-				if ((sum == -3) || (sum == 3)) {
+				if ((sum == -3) || (sum == 30)) {
 					return sum;
 				}
 			}
@@ -135,13 +149,13 @@ public class Main {
 
 		int sum = 0;
 		sum = (arr[0][0]) + (arr[1][1]) + (arr[2][2]);
-		if ((sum == -3) || (sum == 3)) {
+		if ((sum == -3) || (sum == 30)) {
 			return sum;
 		}
 
 		sum = 0;
 		sum = (arr[0][2]) + (arr[1][1]) + (arr[2][0]);
-		if ((sum == -3) || (sum == 3)) {
+		if ((sum == -3) || (sum == 30)) {
 			return sum;
 		}
 
@@ -167,7 +181,344 @@ public class Main {
 		return false;
 	}
 
-}
+	public static int CpuCanWin(int[][] arr) { // перев≥р€Ї чи може комп
+												// виграти
+												// наступним ходом
+
+		// ---------------перев≥рка по горизонтал≥--------//
+
+		for (int i = 0; i < arr.length; i++) {
+			int sum = 0;
+			for (int j = 0; j < arr.length; j++) {
+				sum += arr[i][j];
+				if (sum == 20) {
+					return i;
+				}
+			}
+		}
+
+		// ------------------перев≥рка по вертикал≥------------//
+
+		for (int j = 0; j < arr.length; j++) {
+			int sum = 0;
+			for (int i = 0; i < arr.length; i++) {
+				sum += arr[i][j];
+				if (sum == 20) {
+					return (j + 1) * 10;
+				}
+			}
+		}
+
+		// ------------------перев≥рка по д≥агонал≥------------//
+
+		int sum = 0;
+		sum = (arr[0][0]) + (arr[1][1]) + (arr[2][2]);
+		if (sum == 20) {
+			return 100;
+		}
+
+		sum = 0;
+		sum = (arr[0][2]) + (arr[1][1]) + (arr[2][0]);
+		if (sum == 20) {
+			return 200;
+		}
+
+		return 0;// наступного виграшного дл€ компа немаЇ
+	}
+
+	public static void findCPULastMove(int[][] arr, int win) { // шукаЇм
+																// виграшну
+																// €чейку
+
+		switch (win) {
+		case 0:
+			if (arr[0][0] == 0) {
+				arr[0][0] = 10;
+			}
+			if (arr[0][1] == 0) {
+				arr[0][1] = 10;
+			}
+			if (arr[0][2] == 0) {
+				arr[0][2] = 10;
+			}
+			break;
+		case 1:
+			if (arr[1][0] == 0) {
+				arr[1][0] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[1][2] == 0) {
+				arr[1][2] = 10;
+			}
+			break;
+		case 2:
+			if (arr[2][0] == 0) {
+				arr[2][0] = 10;
+			}
+			if (arr[2][1] == 0) {
+				arr[2][1] = 10;
+			}
+			if (arr[2][2] == 0) {
+				arr[2][2] = 10;
+			}
+			break;
+
+		case 10:
+			if (arr[0][0] == 0) {
+				arr[0][0] = 10;
+			}
+			if (arr[1][0] == 0) {
+				arr[1][0] = 10;
+			}
+			if (arr[2][0] == 0) {
+				arr[2][0] = 10;
+			}
+			break;
+
+		case 20:
+			if (arr[0][1] == 0) {
+				arr[0][1] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[2][1] == 0) {
+				arr[2][1] = 10;
+			}
+			break;
+
+		case 30:
+			if (arr[0][2] == 0) {
+				arr[0][2] = 10;
+			}
+			if (arr[1][2] == 0) {
+				arr[1][2] = 10;
+			}
+			if (arr[2][2] == 0) {
+				arr[2][2] = 10;
+			}
+			break;
+
+		case 100:
+			if (arr[0][0] == 0) {
+				arr[0][0] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[2][2] == 0) {
+				arr[2][2] = 10;
+			}
+			break;
+
+		case 200:
+			if (arr[0][2] == 0) {
+				arr[0][2] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[2][0] == 0) {
+				arr[2][0] = 10;
+			}
+			break;
+
+		}
+
+	}
+
+	public static int PlayerCanWin(int[][] arr) { // перев≥р€Ї чи може ≥грок
+		// виграти
+		// наступним ходом
+
+		// ---------------перев≥рка по горизонтал≥--------//
+
+		for (int i = 0; i < arr.length; i++) {
+			int sum = 0;
+			for (int j = 0; j < arr.length; j++) {
+				sum += arr[i][j];
+				if (sum == -2) {
+					return i;
+				}
+			}
+		}
+
+		// ------------------перев≥рка по вертикал≥------------//
+
+		for (int j = 0; j < arr.length; j++) {
+			int sum = 0;
+			for (int i = 0; i < arr.length; i++) {
+				sum += arr[i][j];
+				if (sum == -2) {
+					return (j + 1) * 10;
+				}
+			}
+		}
+
+		// ------------------перев≥рка по д≥агонал≥------------//
+
+		int sum = 0;
+		sum = (arr[0][0]) + (arr[1][1]) + (arr[2][2]);
+		if (sum == -2) {
+			return 100;
+		}
+
+		sum = 0;
+		sum = (arr[0][2]) + (arr[1][1]) + (arr[2][0]);
+		if (sum == -2) {
+			return 200;
+		}
+
+		return 0;// наступного виграшного дл€ ≥грака немаЇ
+	}
+
+	public static void findPlayerLastMove(int[][] arr, int win) { // шукаЇм
+		// виграшну
+		// €чейку
+
+		switch (win) {
+		case 0:
+			if (arr[0][0] == 0) {
+				arr[0][0] = 10;
+			}
+			if (arr[0][1] == 0) {
+				arr[0][1] = 10;
+			}
+			if (arr[0][2] == 0) {
+				arr[0][2] = 10;
+			}
+			break;
+		case 1:
+			if (arr[1][0] == 0) {
+				arr[1][0] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[1][2] == 0) {
+				arr[1][2] = 10;
+			}
+			break;
+		case 2:
+			if (arr[2][0] == 0) {
+				arr[2][0] = 10;
+			}
+			if (arr[2][1] == 0) {
+				arr[2][1] = 10;
+			}
+			if (arr[2][2] == 0) {
+				arr[2][2] = 10;
+			}
+			break;
+
+		case 10:
+			if (arr[0][0] == 0) {
+				arr[0][0] = 10;
+			}
+			if (arr[1][0] == 0) {
+				arr[1][0] = 10;
+			}
+			if (arr[2][0] == 0) {
+				arr[2][0] = 10;
+			}
+			break;
+
+		case 20:
+			if (arr[0][1] == 0) {
+				arr[0][1] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[2][1] == 0) {
+				arr[2][1] = 10;
+			}
+			break;
+
+		case 30:
+			if (arr[0][2] == 0) {
+				arr[0][2] = 10;
+			}
+			if (arr[1][2] == 0) {
+				arr[1][2] = 10;
+			}
+			if (arr[2][2] == 0) {
+				arr[2][2] = 10;
+			}
+			break;
+
+		case 100:
+			if (arr[0][0] == 0) {
+				arr[0][0] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[2][2] == 0) {
+				arr[2][2] = 10;
+			}
+			break;
+
+		case 200:
+			if (arr[0][2] == 0) {
+				arr[0][2] = 10;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+			}
+			if (arr[2][0] == 0) {
+				arr[2][0] = 10;
+			}
+			break;
+
+		}
+
+	}
+
+	public static int findCorner(int[][] arr) { // ставим в пустий кут
+		if (arr[0][0] == 0) {
+			arr[0][0] = 10;
+			return 1;
+		}
+		if (arr[0][2] == 0) {
+			arr[0][2] = 10;
+			return 1;
+		}
+		if (arr[2][0] == 0) {
+			arr[2][0] = 10;
+			return 1;
+		}
+		if (arr[2][2] == 0) {
+			arr[2][2] = 10;
+			return 1;
+		}
+		return 0;
+	}
+
+	public static void playerMove(int[][] arr, Scanner sc) {// х≥д ≥грака ≥
+															// перев≥рка на
+		// правильн≥сть ходу
+		boolean isNotEmpty = true;
+
+		while (isNotEmpty) { // €кщо кл≥тинка не пуста, то хай ввдоить нов≥
+								// координати
+			System.out.println("enter  X");
+			int x = scan(sc);
+			System.out.println("enter  Y");
+			int y = scan(sc);
+
+			if (arr[x][y] == 0) {
+				arr[x][y] = -1;
+				isNotEmpty = false;
+			}
+
+		}
+
+	}
+
+} // END of CLASS
 
 // public static void test(int[][] arr) {
 //
