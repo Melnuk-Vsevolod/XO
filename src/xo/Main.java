@@ -8,17 +8,63 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		int[][] arr = new int[3][3];
 
-		print(arr);
+		if (random() == -1) {// перший хід буде гравця
+			System.out.println("enter  X");
+			int x = scan(sc);
+			System.out.println("enter  Y");
+			int y = scan(sc);
+
+			arr[x][y] = -1;
+			print(arr);
+
+		}
+		int move = 0;// комп ще ніразу не ходив
+		boolean CPUMove = true;
+
+		while (isRun(arr)) {
+			if (move == 0) {// код для 1 ходу компа
+				if (firstCpuMove(arr)) {// перевіряє чи занята
+					// середина якщо занята то ставим в кут
+					arr[1][1] = 1;
+				} else {
+					arr[0][0] = 1;
+				}
+				move = 1;
+			} else {// вже не перший хід компа
+
+			}
+			System.out.println("enter  X");
+			int x = scan(sc);
+			System.out.println("enter  Y");
+			int y = scan(sc);
+
+			arr[x][y] = -1;
+			print(arr);
+
+		}
+
+		// ---------------гра закінчилась визначення результату--------//
+
+		if (draw(arr)) {
+			System.out.println("Нічия");
+		}
+		if (win(arr) == -3) {
+			System.out.println("Ти ВИГРАВ!");
+		}
+		if (win(arr) == 3) {
+			System.out.println("Ти програв!");
+		}
+
 		// test(arr);
 		// System.out.println(win(arr));
 
 	}
 
-	public static int scan(Scanner sc) { // СЃС‡РёС‚Р°С‚Рё С…С–Рґ РіСЂР°РІС†СЏ
+	public static int scan(Scanner sc) { // считати хід гравця
 		return (sc.nextInt() - 1);
 	}
 
-	public static void print(int[][] arr) { // СЂРѕР·РґСЂСѓРєСѓРІР°С‚Рё РїРѕР»Рµ Р· РҐ С– Рћ
+	public static void print(int[][] arr) { // роздрукувати поле з Х і О
 		for (int i = 0; i < arr.length; i++) {
 			System.out.println("-------");
 			System.out.print("|");
@@ -38,7 +84,7 @@ public class Main {
 		System.out.println("-------");
 	}
 
-	public static int random() { // РїРѕРІРµСЂС‚Р°С” 1 Р°Р±Рѕ -1
+	public static int random() { // повертає 1 або -1
 		double rand = (Math.random());
 		if (rand < 0.5) {
 			return -1;
@@ -47,8 +93,7 @@ public class Main {
 		}
 	}
 
-	public static boolean draw(int[][] arr) { // РїРµСЂРµРІС–СЂРєР° РЅС–С‡РёСЏ, СЏРєС‰Рѕ С‚Р°Рє
-												// РїРѕРІРµСЂС‚Р°С” true
+	public static boolean draw(int[][] arr) { // перевірка нічия, якщо так
 
 		for (int i = 0; i < arr.length; i++) {
 			for (int j = 0; j < arr.length; j++) {
@@ -60,57 +105,66 @@ public class Main {
 		return true;
 	}
 
-	public static int win(int[][] arr) { // РїРµСЂРµРІС–СЂРєР° С‡Рё С…С‚РѕСЃСЊ РІРёРіСЂР°РІ
+	public static int win(int[][] arr) { // перевірка чи хтось виграв
 
-		// ---------------РїРµСЂРµРІС–СЂРєР° РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»С–--------//
+		// ---------------перевірка по горизонталі--------//
 
 		for (int i = 0; i < arr.length; i++) {
 			int sum = 0;
 			for (int j = 0; j < arr.length; j++) {
 				sum += arr[i][j];
-				if ((sum == -3) || (sum == -3)) {
+				if ((sum == -3) || (sum == 3)) {
 					return sum;
 				}
 			}
 		}
 
-		// ------------------РїРµСЂРµРІС–СЂРєР° РїРѕ РІРµСЂС‚РёРєР°Р»С–------------//
+		// ------------------перевірка по вертикалі------------//
 
 		for (int j = 0; j < arr.length; j++) {
 			int sum = 0;
 			for (int i = 0; i < arr.length; i++) {
 				sum += arr[i][j];
-				if ((sum == -3) || (sum == -3)) {
+				if ((sum == -3) || (sum == 3)) {
 					return sum;
 				}
 			}
 		}
 
-		// ------------------РїРµСЂРµРІС–СЂРєР° РїРѕ РґС–Р°РіРѕРЅР°Р»С–------------//
+		// ------------------перевірка по діагоналі------------//
 
 		int sum = 0;
 		sum = (arr[0][0]) + (arr[1][1]) + (arr[2][2]);
-		if ((sum == -3) || (sum == -3)) {
+		if ((sum == -3) || (sum == 3)) {
 			return sum;
 		}
 
 		sum = 0;
 		sum = (arr[0][2]) + (arr[1][1]) + (arr[2][0]);
-		if ((sum == -3) || (sum == -3)) {
+		if ((sum == -3) || (sum == 3)) {
 			return sum;
 		}
 
-		return 0;// РЅС–С…С‚Рѕ РЅРµ РІРёРіСЂР°РІ
+		return 0;// ніхто не виграв
 	}
 
-	public static boolean isRun(int[][] arr) {// РїРµСЂРµРІС–СЂРєР° С‡Рё РіСЂР° РЅРµ Р·Р°РєС–РЅС‡РёР»Р°СЃСЊ
-		if (draw(arr)) { // РЅС–С‡РёСЏ
+	public static boolean isRun(int[][] arr) {// перевірка чи гра не закінчилась
+		if (draw(arr)) { // нічия
 			return false;
 		}
-		if (win(arr) != 0) { // С…С‚РѕСЃСЊ РІРёРіСЂР°РІ
+		if (win(arr) != 0) { // хтось виграв
 			return false;
 		}
 		return true;
+	}
+
+	public static boolean firstCpuMove(int[][] arr) {// перевіряє чи занята
+		// середина і повертає
+		// true якщо занята
+		if (arr[1][1] == 0) {
+			return true;
+		}
+		return false;
 	}
 
 }
