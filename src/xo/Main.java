@@ -15,44 +15,65 @@ public class Main {
 		}
 
 		int move = 0;// комп ще ніразу не ходив
-		boolean CPUMove = true;
 
 		while (isRun(arr)) {
+			boolean CPUMove = true;
 			if (move == 0) {// код для 1 ходу компа
 
 				if (firstCpuMove(arr)) {// перевіряє чи занята // середина якщо
 										// занята то ставим в кут
 					arr[1][1] = 10;
+					move = 1;
 				} else {
 					arr[0][0] = 10;
+					move = 1;
 				}
-				move = 1;
 
 			} else {// вже не перший хід компа
+
 				int winChanceCPU = CpuCanWin(arr);
+				System.out.println("winChanceCPU" + winChanceCPU);
+
 				if ((winChanceCPU) != 0) {// є виграшний для компа хід
 					findCPULastMove(arr, winChanceCPU);// комп робить останній
 														// // вигашний хід
-					break;// цикл while закінчився ідем до результатів
+					CPUMove = false;
 
-				} else {// якщо нема виграшного для компа, то перевіряєм чи є //
-						// виграшний для ігрока
+				} else if ((winChanceCPU) == 0) {// якщо нема виграшного для
+													// компа, то перевіряєм чи є
+													// //
+					// виграшний для ігрока
 					int winChancePlayer = PlayerCanWin(arr);
+					System.out.println("winChancePlayer" + winChancePlayer);
 					if ((winChancePlayer) != 0) {// є виграшний для іграка хід
 						findPlayerLastMove(arr, winChancePlayer);// шукаєм //
 																	// виграшний//
 																	// хід //
 																	// іграка і
 																	// блокуєм
+						CPUMove = false;
+					} else if ((winChancePlayer) == 0) {
+						if (CPUMove) {
+							int corner = findCorner(arr);// ставим в любий кут
+							if (corner == 0) {
+								System.out.println("Всі кути заняті");
+								findFreeCell(arr);
+								CPUMove = false;
+							}
+						}
 					}
 				}
-				int corner = findCorner(arr);// ставим в любий кут
+
 			} // комп зробив хід
+
 			System.out.println("Комп походив");
 			print(arr);
-			playerMove(arr, sc);
-			System.out.println("Ти походив");
-			print(arr);
+
+			if (isRun(arr)) {
+				playerMove(arr, sc);
+				System.out.println("Ти походив");
+				print(arr);
+			}
 
 		}
 
@@ -67,7 +88,6 @@ public class Main {
 		if (win(arr) == 30) {
 			System.out.println("Ти програв!");
 		}
-		print(arr);
 
 		// test(arr);
 		// System.out.println(win(arr));
@@ -191,9 +211,10 @@ public class Main {
 			int sum = 0;
 			for (int j = 0; j < arr.length; j++) {
 				sum += arr[i][j];
-				if (sum == 20) {
-					return i;
-				}
+
+			}
+			if (sum == 20) {
+				return i;
 			}
 		}
 
@@ -203,9 +224,10 @@ public class Main {
 			int sum = 0;
 			for (int i = 0; i < arr.length; i++) {
 				sum += arr[i][j];
-				if (sum == 20) {
-					return (j + 1) * 10;
-				}
+
+			}
+			if (sum == 20) {
+				return (j + 1) * 10;
 			}
 		}
 
@@ -339,9 +361,9 @@ public class Main {
 			int sum = 0;
 			for (int j = 0; j < arr.length; j++) {
 				sum += arr[i][j];
-				if (sum == -2) {
-					return i;
-				}
+			}
+			if (sum == -2) {
+				return i + 1;
 			}
 		}
 
@@ -351,9 +373,9 @@ public class Main {
 			int sum = 0;
 			for (int i = 0; i < arr.length; i++) {
 				sum += arr[i][j];
-				if (sum == -2) {
-					return (j + 1) * 10;
-				}
+			}
+			if (sum == -2) {
+				return (j + 1) * 10;
 			}
 		}
 
@@ -379,97 +401,121 @@ public class Main {
 		// ячейку
 
 		switch (win) {
-		case 0:
+		case 1:
 			if (arr[0][0] == 0) {
 				arr[0][0] = 10;
+				break;
 			}
 			if (arr[0][1] == 0) {
 				arr[0][1] = 10;
+				break;
 			}
 			if (arr[0][2] == 0) {
 				arr[0][2] = 10;
-			}
-			break;
-		case 1:
-			if (arr[1][0] == 0) {
-				arr[1][0] = 10;
-			}
-			if (arr[1][1] == 0) {
-				arr[1][1] = 10;
-			}
-			if (arr[1][2] == 0) {
-				arr[1][2] = 10;
+				break;
 			}
 			break;
 		case 2:
+			if (arr[1][0] == 0) {
+				arr[1][0] = 10;
+				break;
+			}
+			if (arr[1][1] == 0) {
+				arr[1][1] = 10;
+				break;
+			}
+			if (arr[1][2] == 0) {
+				arr[1][2] = 10;
+				break;
+			}
+			break;
+		case 3:
 			if (arr[2][0] == 0) {
 				arr[2][0] = 10;
+				break;
 			}
 			if (arr[2][1] == 0) {
 				arr[2][1] = 10;
+				break;
 			}
 			if (arr[2][2] == 0) {
 				arr[2][2] = 10;
+				break;
 			}
 			break;
 
 		case 10:
 			if (arr[0][0] == 0) {
 				arr[0][0] = 10;
+				break;
 			}
 			if (arr[1][0] == 0) {
 				arr[1][0] = 10;
+				break;
 			}
 			if (arr[2][0] == 0) {
 				arr[2][0] = 10;
+				break;
 			}
 			break;
 
 		case 20:
 			if (arr[0][1] == 0) {
 				arr[0][1] = 10;
+				break;
 			}
 			if (arr[1][1] == 0) {
 				arr[1][1] = 10;
+				break;
 			}
 			if (arr[2][1] == 0) {
 				arr[2][1] = 10;
+				break;
 			}
 			break;
 
 		case 30:
 			if (arr[0][2] == 0) {
 				arr[0][2] = 10;
+				break;
 			}
 			if (arr[1][2] == 0) {
 				arr[1][2] = 10;
+				break;
 			}
 			if (arr[2][2] == 0) {
 				arr[2][2] = 10;
+				break;
 			}
 			break;
 
 		case 100:
 			if (arr[0][0] == 0) {
 				arr[0][0] = 10;
+				break;
 			}
 			if (arr[1][1] == 0) {
 				arr[1][1] = 10;
+				break;
 			}
 			if (arr[2][2] == 0) {
 				arr[2][2] = 10;
+				break;
 			}
 			break;
 
 		case 200:
 			if (arr[0][2] == 0) {
 				arr[0][2] = 10;
+				break;
 			}
 			if (arr[1][1] == 0) {
 				arr[1][1] = 10;
+				break;
 			}
 			if (arr[2][0] == 0) {
 				arr[2][0] = 10;
+				break;
 			}
 			break;
 
@@ -504,18 +550,38 @@ public class Main {
 
 		while (isNotEmpty) { // якщо клітинка не пуста, то хай ввдоить нові
 								// координати
-			System.out.println("enter  X");
-			int x = scan(sc);
 			System.out.println("enter  Y");
+			int x = scan(sc);
+			System.out.println("enter  X");
 			int y = scan(sc);
 
-			if (arr[x][y] == 0) {
-				arr[x][y] = -1;
-				isNotEmpty = false;
+			if ((x >= 0) && (y >= 0) && (x < 3) && (y < 3)) {
+
+				if (arr[x][y] == 0) {
+					arr[x][y] = -1;
+					System.out.println("Клітинка занята");
+					isNotEmpty = false;
+				}
+			}
+		}
+	}
+
+	public static void findFreeCell(int[][] arr) {
+		boolean iterate = true;
+
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 0; j < arr.length; j++) {
+				if ((arr[i][j] == 0) && (iterate)) {
+					arr[i][j] = 10;
+					i = 2;
+					j = 2;
+					iterate = false;
+
+				}
+
 			}
 
 		}
-
 	}
 
 } // END of CLASS
