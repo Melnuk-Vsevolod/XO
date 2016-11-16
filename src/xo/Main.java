@@ -214,7 +214,7 @@ public class Main {
 
 			}
 			if (sum == 20) {
-				return i;
+				return i + 1;
 			}
 		}
 
@@ -253,7 +253,7 @@ public class Main {
 																// €чейку
 
 		switch (win) {
-		case 0:
+		case 1:
 			if (arr[0][0] == 0) {
 				arr[0][0] = 10;
 			}
@@ -264,7 +264,7 @@ public class Main {
 				arr[0][2] = 10;
 			}
 			break;
-		case 1:
+		case 2:
 			if (arr[1][0] == 0) {
 				arr[1][0] = 10;
 			}
@@ -275,7 +275,7 @@ public class Main {
 				arr[1][2] = 10;
 			}
 			break;
-		case 2:
+		case 3:
 			if (arr[2][0] == 0) {
 				arr[2][0] = 10;
 			}
@@ -585,14 +585,4 @@ public class Main {
 	}
 
 } // END of CLASS
-
-// public static void test(int[][] arr) {
-//
-// for (int i = 0; i < arr.length; i++) {
-// for (int j = 0; j < arr.length; j++) {
-// arr[i][j] = -1;
-// }
-// }
-//
-// }
 
