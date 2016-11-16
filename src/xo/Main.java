@@ -1,5 +1,7 @@
 package xo;
 
+//оптимізувати методи і передивитсь код шо лишнє. пошук хода виграшного в одному методі вертати. доробити has.nextInt
+
 import java.util.Scanner;
 
 public class Main {
