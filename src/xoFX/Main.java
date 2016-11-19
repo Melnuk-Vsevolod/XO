@@ -2,7 +2,7 @@
 
 package xoFX;
 
-import java.awt.GridLayout;
+import java.awt.Dimension;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -29,13 +29,39 @@ public class Main extends Application {
 		Button button8 = new Button("8");
 		Button button9 = new Button("9");
 		
+		
+		
+		
 		BorderPane pane = new BorderPane();
+		BorderPane pane1 = new BorderPane();
+		BorderPane pane2 = new BorderPane();
+		BorderPane pane3 = new BorderPane();
+		button1.boundsInLocalProperty();
 		
 		
-		pane.setTop(button1);
-		pane.setBottom(button2);
-		pane.setLeft(button3);
-		pane.setLeft(button4);
+		
+		pane.setTop(pane1);
+		pane.setCenter(pane2);
+		pane.setBottom(pane3);
+		
+		pane1.setLeft(button1);
+		pane1.setCenter(button2);
+		pane1.setRight(button3);
+		
+		
+		pane2.setLeft(button4);
+		pane2.setCenter(button5);
+		pane2.setRight(button6);
+		
+		pane3.setLeft(button7);
+		pane3.setCenter(button8);
+		pane3.setRight(button9);
+		
+		
+//		pane.setCenter(button3);
+//		pane.setLeft(button4);
+//		pane.setRight(button5);
+		
 	
 
 		Scene scene = new Scene(pane, 100, 100);
